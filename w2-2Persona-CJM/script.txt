@@ -1,0 +1,25 @@
+$dict = @{
+    "?듭떖1" = "핵심1"
+    "?듭떖2" = "핵심2"
+    "?뺤옣1" = "확장1"
+    "洹밸떒1" = "극단1"
+    "洹밸떒2" = "극단2"
+    "鍮꾪솢??" = "비활성1"
+}
+$files = Get-ChildItem -Path "c:\Users\a\modu2026\w2-2Persona-CJM\*.md"
+foreach ($f in $files) {
+    if ($f.Name -match "^[0-9]") {
+        $text = [System.IO.File]::ReadAllText($f.FullName, [System.Text.Encoding]::UTF8)
+        $mod = $false
+        foreach ($k in $dict.Keys) {
+            if ($text.Contains($k)) {
+                $text = $text.Replace($k, $dict[$k])
+                $mod = $true
+            }
+        }
+        if ($mod) {
+            [System.IO.File]::WriteAllText($f.FullName, $text, [System.Text.Encoding]::UTF8)
+            Write-Host "Fixed $($f.Name)"
+        }
+    }
+}
